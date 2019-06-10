@@ -51,6 +51,9 @@
     <ProjectReference Include="..\MyLibrary\MyLibrary.vcxproj">
       <Project>{e26b071a-87d6-45c3-8b92-fa64b3dd4cec}</Project>
     </ProjectReference>
+    <ProjectReference Include="..\QtGuiApplication\QtGuiApplication.vcxproj">
+      <Project>{b12702ad-abfb-343a-a199-8e24837244a3}</Project>
+    </ProjectReference>
   </ItemGroup>
   <ItemDefinitionGroup />
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
@@ -83,6 +86,7 @@
       <BasicRuntimeChecks>EnableFastChecks</BasicRuntimeChecks>
       <RuntimeLibrary>MultiThreadedDebugDLL</RuntimeLibrary>
       <WarningLevel>Level3</WarningLevel>
+      <StructMemberAlignment>8Bytes</StructMemberAlignment>
     </ClCompile>
     <Link>
       <GenerateDebugInformation>true</GenerateDebugInformation>

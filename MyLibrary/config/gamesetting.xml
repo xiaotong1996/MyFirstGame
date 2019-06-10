@@ -12,7 +12,7 @@
         PositionY="320"
         HPMax="1"
         Damage="20"
-        DamageDistance="96"
+        DamageDistance="160"
         HeadDose="20"
         MoveDistance="160">
   </Boss1>
@@ -21,8 +21,8 @@
            PositionY="288"
            HPMax="100"
            Damage="10"
-           DamageDistance="64"
-           MoveDistance="128">
+           DamageDistance="128"
+           MoveDistance="160">
   </Warrior>
   <Archer Id="archer"
            PositionX="128"
