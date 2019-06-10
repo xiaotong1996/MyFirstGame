@@ -2,7 +2,9 @@
 
 #include <QtWidgets/QMainWindow>
 #include "ui_QtGuiApplication.h"
-
+/*QtGuiApplication Main Gui just owns a start button.
+* Used as login window, can be expand for future.
+*/
 class QtGuiApplication : public QMainWindow
 {
 	Q_OBJECT

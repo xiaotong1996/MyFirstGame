@@ -1,25 +1,47 @@
 #pragma once
-#include <memory>
 #include <utility>
+#include <string>
+#include <SFML/Graphics.hpp>
+
+/*Unit is the base class used to represent the pieces on the battlefield.
+*/
+
+enum solderType {
+	WARRIOR,
+	ARCHER,
+};
 
 class Unit
 {
+protected:
+	sf::Texture myImage;
+	sf::Sprite mySprite;
 private:
-	int id;
+	std::string id;
 	int population;
 	int HP;
-	std::pair<int, int> position;
+	int HP_max;
+	std::pair<float, float> position;
 	int move_distance;
 	bool is_wait;
+	bool is_selected;
 public:
-	void moveTo(std::pair<int, int> position_new);
+	const std::pair<float, float> getPosition();
+	void moveTo(std::pair<float, float> position_new);
 	void waitChange();
-	virtual void attack() = 0;
 	virtual int getDamage() = 0;
 	virtual int getDamageDistance() = 0;
-	int getHP();
+	virtual solderType getType() = 0;
+	const int getHP();
+	const int getHPmax();
+	const int getMoveDistance();
 	void setHP(int HPnew);
-	Unit();
+	const std::string getID();
+	virtual sf::Sprite getMySprite()=0;
+	const bool isSelected();
+	void setSelected();
+	void setUnSelected();
+	Unit(std::string id,int population,int HP_max, float position_x, float position_y,int move_distance);
 	~Unit();
 };
 

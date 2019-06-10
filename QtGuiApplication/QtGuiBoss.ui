@@ -37,22 +37,22 @@
     <property name="geometry">
      <rect>
       <x>290</x>
-      <y>280</y>
+      <y>270</y>
       <width>121</width>
-      <height>141</height>
+      <height>151</height>
      </rect>
     </property>
     <property name="text">
      <string/>
     </property>
     <property name="pixmap">
-     <pixmap>../../material/sucai/4_card_head.png</pixmap>
+     <pixmap>asset/boss1head.png</pixmap>
     </property>
    </widget>
    <widget class="QPushButton" name="bossSelect1">
     <property name="geometry">
      <rect>
-      <x>290</x>
+      <x>300</x>
       <y>440</y>
       <width>93</width>
       <height>28</height>

@@ -2,10 +2,10 @@
 #include "MoveCommand.h"
 
 
-MoveCommand::MoveCommand(std::unique_ptr<Unit> & unit, std::pair<int, int> position)
-	:unit(std::move(unit)),
+MoveCommand::MoveCommand(std::shared_ptr<Unit> unit, std::pair<float, float> position)
+	:unit(unit),
 	position(position),
-	position_before(std::pair<int,int>(0,0))
+	position_before(std::pair<float, float>(0,0))
 {
 }
 
@@ -15,7 +15,7 @@ MoveCommand::~MoveCommand()
 
 void MoveCommand::execute()
 {
-	position_before = position;
+	position_before = unit->getPosition();
 	unit->moveTo(position);
 }
 

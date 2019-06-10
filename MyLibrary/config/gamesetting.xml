@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Game>
+  <General populationLimit1="20"
+           defaultScale="32"
+           spriteWidth="48"
+           spriteHeight="64"
+           unitScale="1.5"
+           bossScale="2">
+  </General>
+  <Boss1 Id="boss1"
+        PositionX="960"
+        PositionY="320"
+        HPMax="1"
+        Damage="20"
+        DamageDistance="96"
+        HeadDose="20"
+        MoveDistance="160">
+  </Boss1>
+  <Warrior Id="warrior"
+           PositionX="128"
+           PositionY="288"
+           HPMax="100"
+           Damage="10"
+           DamageDistance="64"
+           MoveDistance="128">
+  </Warrior>
+  <Archer Id="archer"
+           PositionX="128"
+           PositionY="288"
+           HPMax="100"
+           Damage="5"
+           DamageDistance="320"
+           MoveDistance="128">
+  </Archer>
+</Game>

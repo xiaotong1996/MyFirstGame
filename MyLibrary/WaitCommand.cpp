@@ -2,8 +2,8 @@
 #include "WaitCommand.h"
 
 
-WaitCommand::WaitCommand(std::unique_ptr<Unit>& unit)
-	:unit(std::move(unit))
+WaitCommand::WaitCommand(std::shared_ptr<Unit> unit)
+	:unit(unit)
 {
 }
 

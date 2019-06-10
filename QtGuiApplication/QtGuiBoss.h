@@ -2,7 +2,8 @@
 
 #include <QMainWindow>
 #include "ui_QtGuiBoss.h"
-
+/*QtGuiBoss allows player to choose a boss
+*/
 class QtGuiBoss : public QMainWindow
 {
 	Q_OBJECT
@@ -13,6 +14,7 @@ public:
 
 private:
 	Ui::QtGuiBoss ui;
+
 
 private slots:
 	void BtnB_Click();

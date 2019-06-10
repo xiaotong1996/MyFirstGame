@@ -2,8 +2,8 @@
 #include "AttackCommand.h"
 
 
-AttackCommand::AttackCommand(std::unique_ptr<Unit>& unit_a, std::unique_ptr<Unit>& unit_d) 
-	:unit_attacker(std::move(unit_a)), unit_target(std::move(unit_d)),targetHP_before(0)
+AttackCommand::AttackCommand(std::shared_ptr<Unit> unit_a, std::shared_ptr<Unit> unit_d)
+	:unit_attacker(unit_a), unit_target(unit_d),targetHP_before(0)
 {
 
 }
