@@ -150,6 +150,7 @@
     <ClInclude Include="AttackCommand.h" />
     <ClInclude Include="Boss.h" />
     <ClInclude Include="Command.h" />
+    <ClInclude Include="fsm.h" />
     <ClInclude Include="GameConfigue.h" />
     <ClInclude Include="GameManager.h" />
     <ClInclude Include="Gamer.h" />

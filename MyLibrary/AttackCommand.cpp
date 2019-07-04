@@ -15,11 +15,14 @@ AttackCommand::~AttackCommand()
 
 void AttackCommand::execute()
 {
+	unit_attacker->fsm.execute(Unit::Triggers::MouseAttack);
 	targetHP_before = unit_target->getHP();
 	unit_target->setHP(unit_target->getHP() - unit_attacker->getDamage());
+	unit_attacker->fsm.reset();
 }
 
 void AttackCommand::undo()
 {
 	unit_target->setHP(targetHP_before);
+	unit_attacker->fsm.reset();
 }

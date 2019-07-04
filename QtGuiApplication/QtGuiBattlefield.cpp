@@ -7,10 +7,7 @@ QtGuiBattlefield::QtGuiBattlefield(QWidget *parent)
 	: QMainWindow(parent)
 {
 	ui.setupUi(this);
-	ui.buttonStart->setCheckable(true);
-	SFMLView = new MyCanvas(this, QPoint(0, 0), QSize(1280, 640));
-	SFMLView->show();
-	
+	ui.buttonStart->setCheckable(true);	
 }
 
 QtGuiBattlefield::~QtGuiBattlefield()
@@ -84,14 +81,18 @@ void QtGuiBattlefield::setNumberArcher(int n)
 	numberArcher = n;
 }
 
-
+void QtGuiBattlefield::initCanvas()
+{
+	SFMLView = new MyCanvas(this, QPoint(0, 0), QSize(1280, 640), bossID, numberWarrior, numberArcher);
+	SFMLView->show();
+}
 
 
 void QtGuiBattlefield::BtnStop_Click()
 {
 	//if player give up this round, it will show the parent widget
 	this->parentWidget()->parentWidget()->show(); 
-	GameManager::instance().getGamer()->getCurrentRound().gameEnd();
+	SFMLView->getGameRound().fsm.execute(GameRound::Triggers::gameEnd);
 	delete this->parentWidget();
 	//delete this;
 	// TO-DO
@@ -101,9 +102,8 @@ void QtGuiBattlefield::BtnStop_Click()
 
 void QtGuiBattlefield::BtnStart_Click()
 {
-	if (!GameManager::instance().getGamer()->getCurrentRound().isEnd()) {
-		GameManager::instance().getGamer()->getCurrentRound().gameStart();
-		GameManager::instance().getGamer()->getCurrentRound().addTurn();
+	if (SFMLView->getGameRound().fsm.is_initial()) {
+		SFMLView->getGameRound().fsm.execute(GameRound::Triggers::gameStart);
 		ui.buttonStart->setCheckable(false);
 	}
 }
@@ -111,29 +111,29 @@ void QtGuiBattlefield::BtnStart_Click()
 void QtGuiBattlefield::BtnCancel_Click()
 {
 	//every round player can only cancel one time
-	GameManager::instance().getGamer()->getCurrentRound().cancelLastCommand();
+	SFMLView->getGameRound().cancelLastCommand();
 }
 
 void QtGuiBattlefield::BtnMove_Click()
 {
-	if (SFMLView->isSomeoneSelected()) {
-		SFMLView->setIsMove(true);
-		SFMLView->setIsAttack(false);
+	std::shared_ptr<Unit> selectedUnit = SFMLView->getSelected();
+	if (selectedUnit !=NULL) {
+		selectedUnit->fsm.execute(Unit::Triggers::BtnMove);
 	}
 }
 
 void QtGuiBattlefield::BtnWait_Click()
 {
-	if (!GameManager::instance().getGamer()->getCurrentRound().isEnd()) {
-		GameManager::instance().getGamer()->getCurrentRound().addTurn();
+	if (SFMLView->getGameRound().fsm.state()!=RoundState::END) {
+		SFMLView->getGameRound().addTurn();
 	}
 }
 
 void QtGuiBattlefield::BtnAttack_Click()
 {
-	if (SFMLView->isSomeoneSelected()) {
-		SFMLView->setIsAttack(true);
-		SFMLView->setIsMove(false);
+	std::shared_ptr<Unit> selectedUnit = SFMLView->getSelected();
+	if (selectedUnit != NULL) {
+		selectedUnit->fsm.execute(Unit::Triggers::BtnAttack);
 	}
 }
 

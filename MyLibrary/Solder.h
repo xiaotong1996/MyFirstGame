@@ -4,6 +4,11 @@
 except the boss on the board.
 */
 
+enum solderType {
+	WARRIOR,
+	ARCHER,
+};
+
 class Solder :
 	public Unit
 {
@@ -13,10 +18,9 @@ public:
 	void attack(std::unique_ptr<Unit> unit_target);
 	virtual int getDamage() override;
 	virtual int getDamageDistance() override;
-	solderType getType() override;
+	solderType getType();
 	sf::Sprite getMySprite();
-private:
-	
+private:	
 	solderType type;
 	int damage;
 	int damage_distance;

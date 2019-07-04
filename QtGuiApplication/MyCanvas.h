@@ -12,26 +12,29 @@
 class MyCanvas : public QSFMLCanvas
 {
 public:
-	MyCanvas(QWidget* Parent, const QPoint& Position, const QSize& Size);//creaeted in Qt parent widget
-	void setBossID(int id);//Used after the constructor
-	void setNumberWarrior(int n);//Used after the constructor
-	void setNumberArcher(int n);//Used after the constructor
+	MyCanvas(QWidget* Parent, const QPoint& Position, const QSize& Size, int bossID, int numberWarrior, int numberArcher);//creaeted in Qt parent widget
+	//void setBossID(int id);//Used after the constructor
+	//void setNumberWarrior(int n);//Used after the constructor
+	//void setNumberArcher(int n);//Used after the constructor
 
 	void OnInit();//init canvas
 	void OnUpdate();//update UI accronding to commands
-	bool isSomeoneSelected();//check if there is a unit has been selected by player
-	void setIsMove(bool i);//set is_move
-	void setIsAttack(bool i);//set is_attack
+	//bool isSomeoneSelected();//check if there is a unit has been selected by player
+	std::shared_ptr<Unit> getSelected();
+	GameRound& getGameRound();
 
 private:
 	bool checkCollision(sf::Vector2f newPosition);//check if there is collision between solders
+	void dragAndput();//used to move units
+	void doCommand();
+	void updateSprites();
 
 	GameRound thisRound;//used as an interface for logical part
 
-	int bossID;//Indicate which boss was selected
-	////std::vector<std::shared_ptr<Boss>> bosss;//stock game setting bosses
-	int numberWarrior;//Number of warrior
-	int numberArcher;//Number of archer
+	//int bossID;//Indicate which boss was selected
+	//////std::vector<std::shared_ptr<Boss>> bosss;//stock game setting bosses
+	//int numberWarrior;//Number of warrior
+	//int numberArcher;//Number of archer
 	//std::vector<std::shared_ptr<Unit>> army;//stock player's chosen army
 	
 	sf::Clock myClock;//used for refresh
@@ -45,10 +48,5 @@ private:
 	int spriteHeight;
 	float unitScale;
 	int defaultScale;
-
-	bool is_move;//ture if movebutton clicked
-	bool is_attack;//ture if attackbutton clicked
-
-	int turn;
 };
 #endif // MYCANVAS_H

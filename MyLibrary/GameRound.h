@@ -5,12 +5,13 @@
 #include "Solder.h"
 #include "Command.h"
 #include "GameConfigue.h"
+#include "fsm.h"
 
 enum RoundState {
 	WIN,
 	LOSS,
 	DRAW,
-	RUNNING,
+	INIT,
 	START,
 	END
 };
@@ -33,17 +34,20 @@ public:
 	void add2Boss(std::shared_ptr<Boss> boss);//add a boss
 	void addTurn();//add turn time
 	const int getTurn();//get turn time
-	void gameStart();//set this round start
-	bool isStart();//check is this round start
-	void gameEnd();//set this round end
-	bool isEnd();//check is this round end
+
+	RoundState winOrLoss();//check round state
+
 	void setCanceled(bool i);//set cancel function usable or not
 	bool getCanceled();//check if cancek function has been used
 	void addCommand2Boss( std::shared_ptr<Command> command);//add a boss command
 	void addCommand2Army( std::shared_ptr<Command> command);//add a unit's command
 	void cancelLastCommand();//undo boss and unit's last command
-	RoundState winOrLoss();//check round state
-private:	
+
+	enum class Triggers { winOrLoss, gameStart, gameEnd};//use fsm to represent gameround state
+	using F = FSM::Fsm<RoundState, RoundState::INIT, Triggers>;
+	F fsm;
+private:
+	
 	int bossID;//Indicate which boss was selected
 	int numberWarrior;//Number of warrior
 	int numberArcher;//Number of archer

@@ -21,7 +21,6 @@ void QtGuiArmyConfig::setBossID(int id)
 {
 	bossID = id;
 	if (bossID == 1) {
-		//GameConfigue gc;
 		ui.limit->setText(QString::number(GameConfigue::population_limit_boss1()));
 	}
 }
@@ -66,7 +65,7 @@ void QtGuiArmyConfig::BtnOK_Click()
 	numberArcher = ui.archersNumber->value();*/
 	if (ui.warriosNumber->value() == 0 && ui.archersNumber->value() == 0) {
 		QMessageBox msgBox; 
-		msgBox.setText("YOU SHOULD CHOOSE YOUR ARMY BEFORE START!!!");
+		msgBox.setText("YOU SHOULD CHOOSE YOUR ARMY BEFORE START!!! ");
 		msgBox.exec();
 	}
 	else {
@@ -74,6 +73,7 @@ void QtGuiArmyConfig::BtnOK_Click()
 		gui_field->setBossID(bossID);
 		gui_field->setNumberArcher(ui.archersNumber->value());
 		gui_field->setNumberWarrior(ui.warriosNumber->value());
+		gui_field->initCanvas();
 		gui_field->show();
 		this->hide();
 	}

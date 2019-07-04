@@ -7,8 +7,20 @@
 //{
 //}
 static int recordtime=0;
-GameRound::GameRound(int bossID, int numberWarrior, int numberArcher) : turn_time(0), is_start(false), is_end(false), recordID(recordtime), is_canceled(false), roundState(RUNNING)
+GameRound::GameRound(int bossID, int numberWarrior, int numberArcher) : turn_time(0), is_start(false), is_end(false), recordID(recordtime), is_canceled(false), roundState(INIT)
 {
+	fsm.add_transitions({
+		{RoundState::INIT, RoundState::START, Triggers::gameStart, nullptr, nullptr},
+		{RoundState::START, RoundState::WIN, Triggers::winOrLoss, [&] {return WIN == winOrLoss(); }, nullptr},
+		{RoundState::START, RoundState::LOSS, Triggers::winOrLoss, [&] {return LOSS == winOrLoss(); }, nullptr},
+		{RoundState::START, RoundState::DRAW, Triggers::winOrLoss, [&] {return DRAW == winOrLoss(); }, nullptr},
+		{RoundState::INIT, RoundState::END, Triggers::gameEnd, nullptr, nullptr},
+		{RoundState::START, RoundState::END, Triggers::gameEnd, nullptr, nullptr},
+		{RoundState::WIN, RoundState::END, Triggers::gameEnd, nullptr, nullptr},
+		{RoundState::LOSS, RoundState::END, Triggers::gameEnd, nullptr, nullptr},
+		{RoundState::DRAW, RoundState::END, Triggers::gameEnd, nullptr, nullptr},
+		});
+
 	recordtime++;
 	//init boss
 	float boss_position_x = GameConfigue::boss1_position_x();
@@ -52,6 +64,8 @@ GameRound::GameRound(int bossID, int numberWarrior, int numberArcher) : turn_tim
 		std::shared_ptr<Unit> archer = std::make_shared<Solder>(ARCHER, archer_id_, archer_HP_max, solder_position_x_, soler_position_y_, archer_damage, archer_damage_distance, archer_move_distance);
 		army.push_back(archer);
 	}
+
+
 }
 
 //GameRound::GameRound(int population_max) : population_max(population_max), turn_time(0), is_start(false), is_end(false), recordID(recordtime), is_canceled(false),roundState(RUNNING)
@@ -103,26 +117,31 @@ const int GameRound::getTurn()
 	return turn_time;
 }
 
-void GameRound::gameStart()
+RoundState GameRound::winOrLoss()
 {
-	is_start = true;
+	if (roundState == END) return END;
+	auto isBossKilled = [](std::shared_ptr <Boss> boss) {if (boss->getHP() <= 0) return true; else return false; };
+	bool isAllBosskilled = std::all_of(bosss.begin(), bosss.end(), isBossKilled);
+	auto isUnitsKilled = [](std::shared_ptr <Unit> unit) {if (unit->getHP() <= 0) return true; else return false; };
+	bool isAllUnitkilled = std::all_of(army.begin(), army.end(), isUnitsKilled);
+
+
+	if (isAllBosskilled&&isAllUnitkilled) {
+		return DRAW;
+	}
+	else if (isAllBosskilled && !isAllUnitkilled)
+	{
+		return WIN;
+	}
+	else if (!isAllBosskilled && isAllUnitkilled) {
+		return LOSS;
+	}
+	else {
+		return START;
+	}
+	
 }
 
-bool GameRound::isStart()
-{
-	return is_start;
-}
-
-void GameRound::gameEnd()
-{
-	is_end = true;
-	roundState = END;
-}
-
-bool GameRound::isEnd()
-{
-	return is_end;
-}
 
 void GameRound::setCanceled(bool i)
 {
@@ -133,9 +152,6 @@ bool GameRound::getCanceled()
 {
 	return is_canceled;
 }
-
-
-
 
 
 void GameRound::addCommand2Boss(std::shared_ptr<Command> command)
@@ -158,30 +174,6 @@ void GameRound::cancelLastCommand()
 			command_boss.back()->undo();
 	}
 	is_canceled = true;
-}
-
-RoundState GameRound::winOrLoss()
-{
-	if (roundState == END) return END;
-	auto isBossKilled = [](std::shared_ptr <Boss> boss) {if (boss->getHP() <= 0) return true; else return false; };
-	bool isAllBosskilled = std::all_of(bosss.begin(), bosss.end(), isBossKilled);
-	auto isUnitsKilled = [](std::shared_ptr <Unit> unit) {if (unit->getHP() <= 0) return true; else return false; };
-	bool isAllUnitkilled = std::all_of(army.begin(), army.end(), isUnitsKilled);
-	
-	
-	if (isAllBosskilled&&isAllUnitkilled) {
-		return DRAW;
-	}
-	else if (isAllBosskilled && !isAllUnitkilled)
-	{
-		return WIN;
-	}
-	else if (!isAllBosskilled && isAllUnitkilled) {
-		return LOSS;
-	}
-	else {
-		return RUNNING;
-	}
 }
 
 

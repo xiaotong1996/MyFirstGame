@@ -10,7 +10,7 @@ class QtGuiBattlefield : public QMainWindow
 	Q_OBJECT
 
 public:
-	QtGuiBattlefield(QWidget *parent = Q_NULLPTR);
+	QtGuiBattlefield( QWidget *parent = Q_NULLPTR);
 	~QtGuiBattlefield();
 	void updateUnitID(std::string id);
 	void updateUnitHP(std::string hp);
@@ -24,6 +24,7 @@ public:
 	void setBossID(int id);
 	void setNumberWarrior(int n);
 	void setNumberArcher(int n);
+	void initCanvas();
 
 private:
 	Ui::QtGuiBattlefield ui;
@@ -40,4 +41,6 @@ private slots:
 	void BtnWait_Click();
 	void BtnAttack_Click();
 	void BtnHeal_Click();
+
+	//void updateUI();
 };

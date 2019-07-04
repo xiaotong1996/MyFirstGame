@@ -14,7 +14,7 @@ public:
 	~Boss();
 	virtual int getDamage() override;
 	virtual int getDamageDistance() override;
-	solderType getType() override;
+	//solderType getType() override;
 	const int getHeal();
 	sf::Sprite getMySprite();
 };

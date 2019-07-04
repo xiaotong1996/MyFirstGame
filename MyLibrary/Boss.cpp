@@ -32,11 +32,11 @@ int Boss::getDamageDistance()
 {
 	return damage_distance;
 }
-
-solderType Boss::getType()
-{
-	return solderType();
-}
+//
+//solderType Boss::getType()
+//{
+//	return solderType();
+//}
 
 const int Boss::getHeal()
 {

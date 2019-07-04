@@ -5,10 +5,17 @@ Unit::Unit(std::string id, int population, int HP_max, float position_x, float p
 	:id(id), population(population), HP(HP_max), HP_max(HP_max)
 	, position(std::pair<float, float>(position_x, position_y))
 	, move_distance(move_distance)
-	, is_wait(false)
-	, is_selected(false)
 {
-
+	fsm.add_transitions({
+		//  from state ,to state  ,triggers        ,guard                    ,action
+		  { States::Unselected  ,States::Selected ,Triggers::Select  ,nullptr  ,nullptr },
+		  { States::Selected  ,States::Unselected ,Triggers::UnSelect  ,nullptr  ,nullptr },
+		  { States::Selected  ,States::Wait ,Triggers::BtnWait  ,nullptr  ,nullptr },
+	      { States::Selected  ,States::Attacking ,Triggers::BtnAttack  ,nullptr  ,nullptr },
+		  { States::Selected  ,States::Moving ,Triggers::BtnMove  ,nullptr  ,nullptr },
+		  { States::Attacking  ,States::Attacked ,Triggers::MouseAttack  ,nullptr  ,nullptr },
+		  { States::Moving  ,States::Moved ,Triggers::MouseMove  ,nullptr  ,nullptr },
+		});
 }
 
 Unit::~Unit()
@@ -20,12 +27,6 @@ void Unit::moveTo(std::pair<float, float> position_new)
 {
 	position = position_new;
 	mySprite.setPosition(sf::Vector2f(position_new.first, position_new.second));
-}
-
-void Unit::waitChange()
-{
-	if (is_wait) is_wait = false;
-	else is_wait = true;
 }
 
 const int Unit::getHP()
@@ -58,17 +59,9 @@ const std::pair<float, float> Unit::getPosition()
 	return position;
 }
 
-const bool Unit::isSelected() {
-	return is_selected;
-}
 
-void Unit::setSelected() {
-	is_selected = true;
-}
 
-void Unit::setUnSelected() {
-	is_selected = false;
-}
+
 
 
 

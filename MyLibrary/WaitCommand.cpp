@@ -14,10 +14,11 @@ WaitCommand::~WaitCommand()
 
 void WaitCommand::execute()
 {
-	unit->waitChange();
+	unit->fsm.execute(Unit::Triggers::BtnWait);
+	unit->fsm.reset();
 }
 
 void WaitCommand::undo()
 {
-	unit->waitChange();
+	unit->fsm.reset();
 }

@@ -15,11 +15,14 @@ MoveCommand::~MoveCommand()
 
 void MoveCommand::execute()
 {
+	unit->fsm.execute(Unit::Triggers::MouseMove);
 	position_before = unit->getPosition();
 	unit->moveTo(position);
+	unit->fsm.reset();
 }
 
 void MoveCommand::undo()
 {
 	unit->moveTo(position_before);
+	unit->fsm.reset();
 }
