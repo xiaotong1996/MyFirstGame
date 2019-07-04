@@ -9,10 +9,14 @@
 #include <QMessageBox>
 
 
-MyCanvas::MyCanvas(QWidget* Parent, const QPoint& Position, const QSize& Size) : QSFMLCanvas(Parent, Position, Size), is_move(false),is_attack(false)
+MyCanvas::MyCanvas(QWidget* Parent, const QPoint& Position, const QSize& Size) : QSFMLCanvas(Parent, Position, Size), is_move(false), is_attack(false), turn(0), thisRound(bossID,numberWarrior,numberArcher)
 {
-	
+	spriteWidth = GameConfigue::sprite_width();
+	spriteHeight = GameConfigue::sprite_height();
+	unitScale = GameConfigue::unit_scale();
+	defaultScale = GameConfigue::default_scale();
 }
+
 void MyCanvas::OnInit()
 {
 	clear();
@@ -26,16 +30,13 @@ void MyCanvas::OnInit()
 	moveTexture.loadFromFile("../QtGuiApplication/asset/movePosition.png");
 	attackTexture.loadFromFile("../QtGuiApplication/asset/attackPosition.png");
 
-	army = GameManager::instance().getGamer()->getCurrentRound().getArmy();
-	bosss = GameManager::instance().getGamer()->getCurrentRound().getBosss();
-	//std::vector<std::shared_ptr<Unit>> army = GameManager::instance().getGamer()->getCurrentRound().getArmy();
-	for (auto solder : army)
+	
+	for (auto solder : thisRound.getArmy())
 	{
 		RenderWindow::draw(solder->getMySprite());
 	}
 
-	//std::vector<std::shared_ptr<Boss>>bosss = GameManager::instance().getGamer()->getCurrentRound().getBosss();
-	for (auto boss : bosss)
+	for (auto boss : thisRound.getBosss())
 	{
 		RenderWindow::draw(boss->getMySprite());
 	}
@@ -47,19 +48,14 @@ void MyCanvas::OnUpdate()
 {
 
 	//update turn time in UI
-	int turn= GameManager::instance().getGamer()->getCurrentRound().getTurn();
 	((QtGuiBattlefield *)parentWidget())->updateGameRound(std::to_string(turn));
 
-	int spriteWidth = GameManager::instance().getGameConfigue()->sprite_width();
-	int spriteHeight = GameManager::instance().getGameConfigue()->sprite_height();
-	float unitScale = GameManager::instance().getGameConfigue()->unit_scale();
-	int defaultScale = GameManager::instance().getGameConfigue()->default_scale();
 	//every time redraw mycanvas
 	//show map
 	MapLayer layer(map, 0);
 	RenderWindow::draw(layer);
 
-	for (auto solder : army)
+	for (auto solder : thisRound.getArmy())
 	{
 		//show selected unit move/attack range
 		if (solder->isSelected()) {
@@ -91,7 +87,7 @@ void MyCanvas::OnUpdate()
 		
 	}
 	//show boss sprites
-	for (auto boss : bosss)
+	for (auto boss : thisRound.getBosss())
 	{
 		if (boss->getHP() > 0) {
 			RenderWindow::draw(boss->getMySprite());
@@ -103,15 +99,15 @@ void MyCanvas::OnUpdate()
 	}
 	
 	//if game end close this renderwindow
-	if (GameManager::instance().getGamer()->getCurrentRound().isEnd())
+	/*if (GameManager::instance().getGamer()->getCurrentRound().isEnd())
 	{
 		RenderWindow::close();
 	}
-
+*/
 	
 	//check if player pushes start button
 	//if game hasn't started
-	if (!GameManager::instance().getGamer()->getCurrentRound().isStart())
+	if (!thisRound.isStart())
 	{
 		sf::Event event;
 		//these two mouse events allow player change his army's position
@@ -121,7 +117,7 @@ void MyCanvas::OnUpdate()
 				if (sf::Mouse::isButtonPressed(sf::Mouse::Left)) {
 					sf::Vector2i mousePotitionpix = sf::Mouse::getPosition(*this);
 					sf::Vector2f mousePotitionf = sf::Vector2f(mousePotitionpix);
-					for (std::shared_ptr<Unit> solder : army)
+					for (std::shared_ptr<Unit> solder : thisRound.getArmy())
 					{
 						if (solder->getMySprite().getGlobalBounds().contains(mousePotitionf)) {
 							solder->setSelected();
@@ -135,7 +131,7 @@ void MyCanvas::OnUpdate()
 				break;
 			case sf::Event::MouseButtonReleased:
 			{
-				for (std::shared_ptr<Unit> solder : army)
+				for (std::shared_ptr<Unit> solder : thisRound.getArmy())
 				{
 					if (solder->isSelected()) {
 						float positonx = sf::Vector2f(sf::Mouse::getPosition(*this)).x-(spriteWidth/2*unitScale);
@@ -163,7 +159,7 @@ void MyCanvas::OnUpdate()
 				if (sf::Mouse::isButtonPressed(sf::Mouse::Left)) {
 					sf::Vector2i mousePotitionpix = sf::Mouse::getPosition(*this);
 					sf::Vector2f mousePotitionf = sf::Vector2f(mousePotitionpix);
-					for (std::shared_ptr<Unit> solder : army)
+					for (std::shared_ptr<Unit> solder : thisRound.getArmy())
 					{
 						if (solder->isSelected()&& solder->getHP() > 0){
 							if (is_move) {
@@ -173,17 +169,17 @@ void MyCanvas::OnUpdate()
 									float positony = sf::Vector2f(sf::Mouse::getPosition(*this)).y - (spriteHeight / 2 * unitScale);
 									std::shared_ptr<Command> moveCommande = std::make_shared<MoveCommand>(solder, std::pair<float, float>(positonx, positony));
 									moveCommande->execute();
-									GameManager::instance().getGamer()->getCurrentRound().addCommand2Army(moveCommande);
-									GameManager::instance().getGamer()->getCurrentRound().addTurn();
+									//GameManager::instance().getGamer()->getCurrentRound().addCommand2Army(moveCommande);
+									thisRound.addTurn();
 								}
 							}
 							else if (is_attack) {
-								for (auto boss : bosss) {
+								for (auto boss : thisRound.getBosss()) {
 									//check if boss is in the solder's attack range and player choose to attack this boss
 									if (distanceSprite.getGlobalBounds().intersects(boss->getMySprite().getGlobalBounds())&& boss->getMySprite().getGlobalBounds().contains(mousePotitionf)) {
 										std::shared_ptr<Command> attackCommand = std::make_shared<AttackCommand>(solder, boss);
 										attackCommand->execute();
-										GameManager::instance().getGamer()->getCurrentRound().addCommand2Army(attackCommand);
+										thisRound.addCommand2Army(attackCommand);
 										//boss AI command
 										std::shared_ptr<Command> bossCommand;
 										if (boss->getMySprite().getGlobalBounds().intersects(solder->getMySprite().getGlobalBounds())) {
@@ -198,10 +194,10 @@ void MyCanvas::OnUpdate()
 
 										}
 										bossCommand->execute();
-										GameManager::instance().getGamer()->getCurrentRound().addCommand2Boss(bossCommand);
+										thisRound.addCommand2Boss(bossCommand);
 											
 										
-										GameManager::instance().getGamer()->getCurrentRound().addTurn();
+										thisRound.addTurn();
 									}
 								}
 								
@@ -237,24 +233,24 @@ void MyCanvas::OnUpdate()
 	//check this round win or loss
 	QMessageBox msgBox;
 
-	RoundState state = GameManager::instance().getGamer()->getCurrentRound().winOrLoss();
+	RoundState state = thisRound.winOrLoss();
 	switch (state) {
 	case RoundState::WIN: {
 		msgBox.setText("Victory!!!!^^");
 		msgBox.exec();
-		GameManager::instance().getGamer()->getCurrentRound().gameEnd();
+		thisRound.gameEnd();
 		break;
 	}
 	case RoundState::LOSS: {
 		msgBox.setText("Defeat");
 		msgBox.exec();
-		GameManager::instance().getGamer()->getCurrentRound().gameEnd();
+		thisRound.gameEnd();
 		break;
 	}
 	case RoundState::DRAW: {
 		msgBox.setText("Draw");
 		msgBox.exec();
-		GameManager::instance().getGamer()->getCurrentRound().gameEnd();
+		thisRound.gameEnd();
 		break;
 	}
 	}
@@ -264,7 +260,7 @@ void MyCanvas::OnUpdate()
 
 bool MyCanvas::isSomeoneSelected()
 {
-	for (std::shared_ptr<Unit> solder : army) {
+	for (std::shared_ptr<Unit> solder : thisRound.getArmy()) {
 		if (solder->isSelected()) return true;
 	}
 	return false;
@@ -281,8 +277,24 @@ void MyCanvas::setIsAttack(bool i)
 	is_attack = i;
 }
 
+void MyCanvas::setBossID(int id)
+{
+	bossID = id;
+}
+
+void MyCanvas::setNumberWarrior(int n)
+{
+	numberWarrior = n;
+}
+
+void MyCanvas::setNumberArcher(int n)
+{
+	numberArcher = n;
+}
+
+
 bool MyCanvas::checkCollision(sf::Vector2f newPosition) {
-	for (std::shared_ptr<Unit> solder : army) {
+	for (std::shared_ptr<Unit> solder : thisRound.getArmy()) {
 		if (solder->isSelected()) continue;
 		else {
 			if (solder->getMySprite().getGlobalBounds().contains(newPosition)) {

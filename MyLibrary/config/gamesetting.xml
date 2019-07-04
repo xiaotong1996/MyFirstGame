@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <Game>
-  <General populationLimit1="20"
+  <General populationLimit1="5"
            defaultScale="32"
            spriteWidth="48"
            spriteHeight="64"

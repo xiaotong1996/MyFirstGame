@@ -14,17 +14,56 @@
    <string>QtGuiApplication</string>
   </property>
   <widget class="QWidget" name="centralWidget">
-   <widget class="QPushButton" name="pushButton">
+   <widget class="QPushButton" name="newGameBtn">
     <property name="geometry">
      <rect>
-      <x>240</x>
+      <x>230</x>
+      <y>60</y>
+      <width>93</width>
+      <height>28</height>
+     </rect>
+    </property>
+    <property name="text">
+     <string>new game</string>
+    </property>
+   </widget>
+   <widget class="QPushButton" name="loadGameBtn">
+    <property name="geometry">
+     <rect>
+      <x>230</x>
       <y>130</y>
       <width>93</width>
       <height>28</height>
      </rect>
     </property>
     <property name="text">
-     <string>start</string>
+     <string>load game</string>
+    </property>
+   </widget>
+   <widget class="QPushButton" name="settingBtn">
+    <property name="geometry">
+     <rect>
+      <x>230</x>
+      <y>190</y>
+      <width>93</width>
+      <height>28</height>
+     </rect>
+    </property>
+    <property name="text">
+     <string>setting</string>
+    </property>
+   </widget>
+   <widget class="QPushButton" name="exitBtn">
+    <property name="geometry">
+     <rect>
+      <x>230</x>
+      <y>250</y>
+      <width>93</width>
+      <height>28</height>
+     </rect>
+    </property>
+    <property name="text">
+     <string>exit</string>
     </property>
    </widget>
   </widget>
@@ -54,14 +93,14 @@
  </resources>
  <connections>
   <connection>
-   <sender>pushButton</sender>
+   <sender>newGameBtn</sender>
    <signal>clicked()</signal>
    <receiver>QtGuiApplicationClass</receiver>
    <slot>BtnS_Click()</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>298</x>
-     <y>183</y>
+     <x>288</x>
+     <y>127</y>
     </hint>
     <hint type="destinationlabel">
      <x>373</x>

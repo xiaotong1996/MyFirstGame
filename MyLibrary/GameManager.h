@@ -2,6 +2,7 @@
 #include "Gamer.h"
 #include <memory>
 #include "GameConfigue.h"
+//NOT used 
 class GameManager
 {
 public:

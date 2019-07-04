@@ -1,6 +1,7 @@
 #include "QtGuiBattlefield.h"
 #include "../MyLibrary/GameManager.h"
 #include <QtGuiBoss.h>
+#include <qdebug.h>
 
 QtGuiBattlefield::QtGuiBattlefield(QWidget *parent)
 	: QMainWindow(parent)
@@ -67,6 +68,24 @@ void QtGuiBattlefield::updateGameRound(std::string round)
 	std::string newRound = "Round: " + round;
 	ui.gameRound->setText(QString::fromStdString(newRound));
 }
+
+void QtGuiBattlefield::setBossID(int id)
+{
+	bossID = id;
+}
+
+void QtGuiBattlefield::setNumberWarrior(int n)
+{
+	numberWarrior = n;
+}
+
+void QtGuiBattlefield::setNumberArcher(int n)
+{
+	numberArcher = n;
+}
+
+
+
 
 void QtGuiBattlefield::BtnStop_Click()
 {

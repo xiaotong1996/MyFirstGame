@@ -12,9 +12,11 @@ class QtGuiArmyConfig : public QMainWindow
 public:
 	QtGuiArmyConfig(QWidget *parent = Q_NULLPTR);
 	~QtGuiArmyConfig();
+	void setBossID(int id);
 
 private:
 	Ui::QtGuiArmyConfig ui;
+	int bossID;
 
 private slots:
 	void BtnB_Click();

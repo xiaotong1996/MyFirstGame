@@ -1,24 +1,36 @@
 #include "QtGuiArmyConfig.h"
+
 #include "QtGuiBattlefield.h"
 #include "../MyLibrary/GameManager.h"
 #include <string>
+#include <QMessageBox>
+
 
 
 QtGuiArmyConfig::QtGuiArmyConfig(QWidget *parent)
 	: QMainWindow(parent)
 {
 	ui.setupUi(this);
-	ui.limit->setText(QString::number(GameManager::instance().getGamer()->getCurrentRound().getPopulationMax()));
 }
 
 QtGuiArmyConfig::~QtGuiArmyConfig()
 {
 }
 
+void QtGuiArmyConfig::setBossID(int id)
+{
+	bossID = id;
+	if (bossID == 1) {
+		//GameConfigue gc;
+		ui.limit->setText(QString::number(GameConfigue::population_limit_boss1()));
+	}
+}
+
+
 void QtGuiArmyConfig::BtnOK_Click()
 {
 	//set solder
-	int solder_position_x = GameManager::instance().getGameConfigue()->warrior_position_x();
+	/*int solder_position_x = GameManager::instance().getGameConfigue()->warrior_position_x();
 	int solder_position_y = GameManager::instance().getGameConfigue()->warrior_postition_y();
 	std::string warrior_id = GameManager::instance().getGameConfigue()->warrior_id();
 	int warrior_HP_max = GameManager::instance().getGameConfigue()->warrior_HP_max();
@@ -49,11 +61,23 @@ void QtGuiArmyConfig::BtnOK_Click()
 		int soler_position_y_ = solder_position_y + i * scale*2;
 		std::shared_ptr<Unit> archer = std::make_shared<Solder>(ARCHER,archer_id_, archer_HP_max, solder_position_x_, soler_position_y_, archer_damage, archer_damage_distance, archer_move_distance);
 		GameManager::instance().getGamer()->getCurrentRound().add2Army(archer);
+	}*/
+	/*numberWarrior = ui.warriosNumber->value();
+	numberArcher = ui.archersNumber->value();*/
+	if (ui.warriosNumber->value() == 0 && ui.archersNumber->value() == 0) {
+		QMessageBox msgBox; 
+		msgBox.setText("YOU SHOULD CHOOSE YOUR ARMY BEFORE START!!!");
+		msgBox.exec();
+	}
+	else {
+		QtGuiBattlefield* gui_field = new QtGuiBattlefield(this);
+		gui_field->setBossID(bossID);
+		gui_field->setNumberArcher(ui.archersNumber->value());
+		gui_field->setNumberWarrior(ui.warriosNumber->value());
+		gui_field->show();
+		this->hide();
 	}
 	
-	QtGuiBattlefield* gui_field = new QtGuiBattlefield(this);
-	gui_field->show();
-	this->hide();
 	
 }
 

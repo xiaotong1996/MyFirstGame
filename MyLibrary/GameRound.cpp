@@ -7,21 +7,68 @@
 //{
 //}
 static int recordtime=0;
-GameRound::GameRound(int population_max) : population_max(population_max), turn_time(0), is_start(false), is_end(false), recordID(recordtime), is_canceled(false),roundState(RUNNING)
+GameRound::GameRound(int bossID, int numberWarrior, int numberArcher) : turn_time(0), is_start(false), is_end(false), recordID(recordtime), is_canceled(false), roundState(RUNNING)
 {
 	recordtime++;
+	//init boss
+	float boss_position_x = GameConfigue::boss1_position_x();
+	float boss_position_y = GameConfigue::boss1_position_y();
+	std::string boss1_id = GameConfigue::boss1_id();
+	int boss1_HP_max = GameConfigue::boss1_HP_max();
+	int boss1_damage = GameConfigue::boss1_damage();
+	int boss1_damage_distance = GameConfigue::boss1_damage_distance();
+	int boss1_heal_dose = GameConfigue::boss1_heal_dose();
+	int boss1_move_distance = GameConfigue::boss1_move_distance();
+
+	std::shared_ptr<Boss> boss = std::make_shared<Boss>(boss1_id, boss1_HP_max, boss_position_x, boss_position_y, boss1_damage, boss1_damage_distance, boss1_heal_dose, boss1_move_distance);
+	bosss.push_back(boss);
+	//init army
+	float solder_position_x = GameConfigue::warrior_position_x();
+	float solder_position_y = GameConfigue::warrior_postition_y();
+	std::string warrior_id = GameConfigue::warrior_id();
+	int warrior_HP_max = GameConfigue::warrior_HP_max();
+	int warrior_damage = GameConfigue::warrior_damage();
+	int warrior_damage_distance = GameConfigue::warrior_damage_distance();
+	int warrior_move_distance = GameConfigue::warrior_move_distance();
+	std::string archer_id = GameConfigue::archer_id();
+	int archer_HP_max = GameConfigue::archer_HP_max();
+	int archer_damage = GameConfigue::archer_damage();
+	int archer_damage_distance = GameConfigue::archer_damage_distance();
+	int archer_move_distance = GameConfigue::archer_move_distance();
+
+	int scale = GameConfigue::default_scale();
+
+	for (int i = 0; i < numberWarrior; i++) {
+		std::string warrior_id_ = warrior_id + std::to_string(i);
+		float solder_position_x_ = solder_position_x + scale * 2;
+		float soler_position_y_ = solder_position_y + i * scale * 2;
+		std::shared_ptr<Unit> warrior = std::make_shared<Solder>(WARRIOR, warrior_id_, warrior_HP_max, solder_position_x_, soler_position_y_, warrior_damage, warrior_damage_distance, warrior_move_distance);
+		army.push_back(warrior);
+	}
+	for (int i = 0; i < numberArcher; i++) {
+		std::string archer_id_ = archer_id + std::to_string(i);
+		float solder_position_x_ = solder_position_x;
+		float soler_position_y_ = solder_position_y + i * scale * 2;
+		std::shared_ptr<Unit> archer = std::make_shared<Solder>(ARCHER, archer_id_, archer_HP_max, solder_position_x_, soler_position_y_, archer_damage, archer_damage_distance, archer_move_distance);
+		army.push_back(archer);
+	}
 }
+
+//GameRound::GameRound(int population_max) : population_max(population_max), turn_time(0), is_start(false), is_end(false), recordID(recordtime), is_canceled(false),roundState(RUNNING)
+//{
+//	recordtime++;
+//}
 
 
 GameRound::~GameRound()
 {
 }
 
-const int GameRound::getPopulationMax() const
-{
-	// TODO: insert return statement here
-	return population_max;
-}
+//const int GameRound::getPopulationMax() const
+//{
+//	// TODO: insert return statement here
+//	return population_max;
+//}
 
 std::vector<std::shared_ptr<Boss>>& GameRound::getBosss()
 {

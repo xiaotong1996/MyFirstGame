@@ -20,4 +20,6 @@ private slots:
 	void BtnB_Click();
 	void Btn1_Click();
 
+
+
 };

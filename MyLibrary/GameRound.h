@@ -4,6 +4,7 @@
 #include "Boss.h"
 #include "Solder.h"
 #include "Command.h"
+#include "GameConfigue.h"
 
 enum RoundState {
 	WIN,
@@ -22,9 +23,10 @@ class GameRound
 {
 public:
 	//GameRound(int population_max, std::shared_ptr<Boss> boss);
-	GameRound(int population_max);//constructor set population
+	GameRound(int bossID, int numberWarrior, int numberArcher);
+	//GameRound(int population_max);//constructor set population
 	~GameRound();
-	const int getPopulationMax() const;//get population maximam
+	//const int getPopulationMax() const;//get population maximam
 	std::vector<std::shared_ptr<Boss>>& getBosss();//get all boss player has choosen to challenge in this Round
 	std::vector<std::shared_ptr<Unit>> & getArmy();//get all solders player has choosen to use in this Round
 	void add2Army(std::shared_ptr<Unit> unit);//add a solder 
@@ -42,6 +44,10 @@ public:
 	void cancelLastCommand();//undo boss and unit's last command
 	RoundState winOrLoss();//check round state
 private:	
+	int bossID;//Indicate which boss was selected
+	int numberWarrior;//Number of warrior
+	int numberArcher;//Number of archer
+
 	int recordID;//unique id to record this round
 	bool is_canceled;//cancel function usable or not
 	bool is_start;//whole round start or not

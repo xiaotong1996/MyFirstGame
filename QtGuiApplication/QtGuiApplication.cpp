@@ -2,7 +2,7 @@
 #include "QtGuiBoss.h"
 #include <memory>
 #include <qdebug.h>
-#include "../MyLibrary/GameManager.h"
+
 
 QtGuiApplication::QtGuiApplication(QWidget *parent)
 	: QMainWindow(parent)
@@ -12,8 +12,8 @@ QtGuiApplication::QtGuiApplication(QWidget *parent)
 
 
 void QtGuiApplication::BtnS_Click() {
-	GameManager::instance().initGamer();
-	GameManager::instance().initGameConfigue();
+	//GameManager::instance().initGamer();
+	//GameManager::instance().initGameConfigue();
 	QtGuiBoss* gui_boss = new QtGuiBoss(this);
 	gui_boss->show();
 	this->hide();

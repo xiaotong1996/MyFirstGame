@@ -21,9 +21,16 @@ public:
 	void updateBossMoveDistance(std::string moveD);
 	void updateBossAttribute(std::string attribute);
 	void updateGameRound(std::string round);
+	void setBossID(int id);
+	void setNumberWarrior(int n);
+	void setNumberArcher(int n);
+
 private:
 	Ui::QtGuiBattlefield ui;
 	MyCanvas* SFMLView;
+	int bossID;
+	int numberWarrior;
+	int numberArcher;
 
 private slots:
 	void BtnStop_Click();

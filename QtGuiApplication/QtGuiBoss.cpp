@@ -14,10 +14,11 @@ QtGuiBoss::~QtGuiBoss()
 {
 }
 
+
 void QtGuiBoss::Btn1_Click()
 {
 	//set boss1
-	float boss_position_x = GameManager::instance().getGameConfigue()->boss1_position_x();
+	/*float boss_position_x = GameManager::instance().getGameConfigue()->boss1_position_x();
 	float boss_position_y = GameManager::instance().getGameConfigue()->boss1_position_y();
 	std::string boss1_id = GameManager::instance().getGameConfigue()->boss1_id();
 	int boss1_HP_max = GameManager::instance().getGameConfigue()->boss1_HP_max();
@@ -30,10 +31,10 @@ void QtGuiBoss::Btn1_Click()
 	std::shared_ptr<Boss> boss=std::make_shared<Boss>(boss1_id, boss1_HP_max, boss_position_x, boss_position_y, boss1_damage, boss1_damage_distance, boss1_heal_dose, boss1_move_distance);
 	const int population_limit_boss1 = GameManager::instance().getGameConfigue()->population_limit_boss1();
 	GameManager::instance().getGamer()->addRound(population_limit_boss1);
-	GameManager::instance().getGamer()->getCurrentRound().add2Boss(boss);
+	GameManager::instance().getGamer()->getCurrentRound().add2Boss(boss);*/
 	
 	QtGuiArmyConfig* gui_army = new QtGuiArmyConfig(this);
-
+	gui_army->setBossID(1);
 	gui_army->show();
 	this->hide();
 }
